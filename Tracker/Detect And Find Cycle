@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int main() {
+    int n ,m; cin>>n>>m;
+    map<pair<int,int>,int> mp;
+
+
+    int x;
+    vector<int> p(n+1);
+    vector<ll> dis(n+1 , 0);
+    vector<vector<int>> edges;
+
+    for(int i = 1;i<=n;i++){
+        edges.push_back({0 , i , 0});
+    }
+
+    for(int i = 0;i<m;i++){
+        int u , v , w; cin>>u>>v>>w;
+        edges.push_back({ u , v , w});
+    }
+
+    for(int i = 1;i<=n;i++){
+        x = -1;
+        for(auto it:edges){
+            int u = it[0] , v = it[1] , w = it[2];
+            
+            if( dis[u] + w < dis[v]){
+                x = v;
+                p[x] = u;
+                dis[v] = dis[u] + w; 
+            }
+
+        }
+
+    }
+
+    if(x == -1){
+        cout<<"NO"<<endl; return 0;
+    }
+
+    vector<int> f(n+1 , 0);
+    queue<int> q;
+    
+    while(1){
+        q.push(x);
+        f[x]++;
+        if(f[x] > 1) break;
+        x = p[x];
+    }
+
+    while(q.front() != x) q.pop();
+
+    vector<int> ans;
+    while(!q.empty()){
+        ans.push_back(q.front());
+        q.pop();
+    } 
+    
+    reverse(ans.begin() , ans.end());
+
+    cout<<"YES"<<endl; 
+    for(auto it:ans) cout<<it<<" ";
+    cout<<endl;
+}
